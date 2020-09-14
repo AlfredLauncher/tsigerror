@@ -1,0 +1,4 @@
+AAdmiral56-1 ansible_host=193.40.156.86 ansible_port=1622 ansible_ssh_user=ubuntu ansible_python_interpreter=python3
+
+[web_servers]
+AAdmiral56-1

@@ -1,0 +1,8 @@
+---
+ - name: ensure nginx is at the latest version
+   apt:
+     name: nginx
+ - name: start nginx
+   service:
+      name: nginx
+      state: started
