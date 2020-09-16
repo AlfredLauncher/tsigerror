@@ -1,0 +1,7 @@
+---
+  - name: App Server for Lab 3
+    become: yes
+    hosts: app_servers
+    roles:
+      - agama
+      - uwsgi

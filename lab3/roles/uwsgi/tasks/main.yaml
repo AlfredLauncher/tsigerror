@@ -1,0 +1,16 @@
+---
+ - name: installing package uwsgi
+   apt:
+     name: uwsgi
+
+ - name: installing package uwsgi-plugin-python3
+   apt:
+     name: uwsgi-plugin-python3
+
+
+ - name: configuring to start on boot
+   service:
+     name: uwsgi
+     state: started
+   become: true
+   become_user: agama
