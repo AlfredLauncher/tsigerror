@@ -1,0 +1,43 @@
+---
+ - name: installing package mysql-server
+   apt:
+     name: mysql-server
+
+ - name: create config file
+   file:
+     path: /etc/mysql/mysql.conf.d/mysqld.cnf
+     state: touch
+     remote_src: yes
+
+ - name: making mysql config file
+   copy:
+     dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+     content: |
+      [mysqld]
+      bind-address = 127.0.0.1
+
+
+
+ - name: create override config file
+   file:
+     path: /etc/mysql/mysql.conf.d/override.cnf
+     state: touch
+     remote_src: yes
+
+ - name: making mysql config file
+   copy:
+     dest: /etc/mysql/mysql.conf.d/override.cnf
+     content: |
+      [mysqld]
+      bind-address = 0.0.0.0
+
+ - name: restarting
+   service:
+     name: mysql
+     state: restarted
+
+ - name: configuring to start on boot
+   service:
+     name: mysql
+     state: started
+   become: true
