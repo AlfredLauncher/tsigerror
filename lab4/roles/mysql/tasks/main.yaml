@@ -3,26 +3,9 @@
    apt:
      name: mysql-server
 
- - name: create config file
-   file:
-     path: /etc/mysql/mysql.conf.d/mysqld.cnf
-     state: touch
-     remote_src: yes
-
- - name: making mysql config file
-   copy:
-     dest: /etc/mysql/mysql.conf.d/mysqld.cnf
-     content: |
-      [mysqld]
-      bind-address = 127.0.0.1
-
-
-
- - name: create override config file
-   file:
-     path: /etc/mysql/mysql.conf.d/override.cnf
-     state: touch
-     remote_src: yes
+ - name: installing package python3-pymysql
+   apt:
+     name: python3-pymysql
 
  - name: making mysql config file
    copy:
@@ -30,6 +13,16 @@
      content: |
       [mysqld]
       bind-address = 0.0.0.0
+
+ - name: creating database
+   community.mysql.mysql_db:
+     name: mysql_database
+     state: present
+
+ - name: MySQL database
+   mysql_db:
+     name: "{{ mysql_database }}"
+     login_unix_socket: /var/run/mysqld/mysqld.sock
 
  - name: restarting
    service:
