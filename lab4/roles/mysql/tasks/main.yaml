@@ -14,15 +14,20 @@
       [mysqld]
       bind-address = 0.0.0.0
 
- - name: creating database
-   community.mysql.mysql_db:
-     name: mysql_database
-     state: present
-
  - name: MySQL database
    mysql_db:
      name: "{{ mysql_database }}"
      login_unix_socket: /var/run/mysqld/mysqld.sock
+     state: present 
+
+
+ - name: creating MySQL user
+   mysql_user:
+     name: "{{ mysql_database }}"
+     password: "{{ mysql_password }}"
+     priv: "{{ mysql_database }}.*:ALL"
+     login_unix_socket: /var/run/mysqld/mysqld.sock
+     host: "%"
 
  - name: restarting
    service:

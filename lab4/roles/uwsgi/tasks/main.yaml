@@ -3,6 +3,11 @@
    apt:
      name: uwsgi
 
+ - name: installing package python3-pymysql
+   apt:
+     name: python3-pymysql
+
+
  - name: installing package uwsgi-plugin-python3
    apt:
      name: uwsgi-plugin-python3
