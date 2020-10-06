@@ -1,0 +1,10 @@
+---
+ - name: Setup
+   hosts: all
+   tasks:
+     - setup:
+
+ - name: DNS servers
+   hosts: dns_server
+   roles:
+     - bind
