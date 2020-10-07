@@ -5,6 +5,6 @@
      - setup:
 
  - name: DNS servers
-   hosts: dns_server
+   hosts: AAdmiral56-2
    roles:
      - bind

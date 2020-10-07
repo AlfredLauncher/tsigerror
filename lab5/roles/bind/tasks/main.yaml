@@ -3,39 +3,53 @@
    apt:
      name: bind9
 
- - name: configure DNS forwarders
-   copy:
-      dest: "/etc/bind/named.conf.options"
-      content: |
-        options {
-        directory "/var/cache/bind";
+ - name: Copy named conf file
+   template:
+     src: named.conf.options.j2
+     dest: /etc/named.conf.options
+     owner: root
+     group: named
+     mode: 0660
+   notify: restart named
 
-         acl local-lan {
-         localhost;
-         192.168.42.0/24;
-         };
-        // If there is a firewall between you and nameservers you want
-        // to talk to, you may need to fix the firewall to allow multiple
-        // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+ - name: Make named directory
+   file:
+     path: /etc/named
+     state: directory
+     owner: root
+     group: named
+     mode: 0750
 
-        // If your ISP provided one or more IP addresses for stable 
-        // nameservers, you probably want to use them as forwarders.  
-        // Uncomment the following block, and insert the addresses replacing 
-        // the all-0's placeholder.
+ - name: Copy named conf local file
+   template:
+     src: resolv.conf
+     dest: /etc/named/resolv.conf
+     owner: root
+     group: named
+     mode: 0640
+   notify: restart named
 
-           forwarders {
-                1.1.1.1;
-                8.8.8.8;
-                9.9.9.9;
-                9.9.9.10;
-          };
 
-        //========================================================================
-        // If BIND logs error messages about the root key being expired,
-        // you will need to update your keys.  See https://www.isc.org/bind-keys
-        //========================================================================
-        dnssec-validation auto;
+ - name: Make zones Directory
+   file:
+     path: /etc/named/zones
+     state: directory
+     owner: root
+     group: named
+     mode: 0750
 
-        auth-nxdomain no;    # conform to RFC1035
-        listen-on-v6 { any; };
-                 };
+ - name: Copy forward file
+   template:
+     src: db.adattiva.j2
+     dest: /etc/named/zones/db.{{ domain }}
+     owner: root
+     group: named
+     mode: 0640
+   notify: restart named
+
+ - name: Open firewall port
+   firewalld:
+     service: dns
+     permanent: true
+     state: enabled
+     immediate: yes
