@@ -1,1 +1,18 @@
+dns_forwarders:
+  - 8.8.8.8
+
+rev_domain: 42.168.192.in-addr.arpa
+
+hostname: adattiva
 domain: adattiva.xyz
+
+reverse_domain:
+ - reverse: 42.168.192.in-addr.arpa.
+
+dns_record:
+ - name: vm1
+   type: A
+   ipaddress: 192.168.42.30
+ - name: vm2
+   type: A
+   ipaddress: 192.168.42.28
