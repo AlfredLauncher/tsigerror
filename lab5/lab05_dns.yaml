@@ -1,7 +1,5 @@
 ---
   - hosts: all
-    vars:
-      ansible_user: "ubuntu"
     tasks:
       - debug: msg="REPLY from {{ ansible_facts['nodename'] }}..."
     roles:
