@@ -1,1 +1,1 @@
-ARGS="--web.external-url=http://193.40.156.86:2822/prometheus"
+ARGS="--web.external-url=http://193.40.156.86:2880/prometheus"
