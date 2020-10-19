@@ -8,12 +8,12 @@
       name: nginx
       state: started
 
-- name: Configure reverse proxy
-  template:
+ - name: Configure reverse proxy
+   template:
     src: default.j2
     dest: /etc/nginx/sites-enabled/default
     force: yes
-  notify: Restart Nginx
+   notify: Restart Nginx
 
  - name: restart nginx
    service:
