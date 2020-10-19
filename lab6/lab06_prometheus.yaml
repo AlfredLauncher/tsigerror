@@ -15,4 +15,4 @@
   hosts: all
   become: yes
   roles:
-    - reverse_proxy
+    - nginx
