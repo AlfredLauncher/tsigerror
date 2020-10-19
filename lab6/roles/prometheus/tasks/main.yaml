@@ -4,6 +4,11 @@
     name: 
       - prometheus-node-exporter
 
+- name: create dirctory if missing
+  file:
+    path: /etc/prometheus/
+    state: directory
+
 - name: configuring
   template: 
     src: prometheus.yml.j2
