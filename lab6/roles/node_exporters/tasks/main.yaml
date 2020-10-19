@@ -1,0 +1,5 @@
+---
+- name: Intall Node Exporters
+  apt:
+    name: 
+      - prometheus-node-exporter

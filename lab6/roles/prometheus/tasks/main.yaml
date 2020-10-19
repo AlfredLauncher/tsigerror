@@ -1,0 +1,21 @@
+---
+- name: Install Node Exporters
+  apt:
+    name: 
+      - prometheus-node-exporter
+
+- name: configuring
+  template: 
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+
+- name: open up prometheus
+  copy:
+    src: prometheus
+    dest: /etc/default/prometheus
+
+- name: restart prometheus
+  service:
+    name: prometheus
+    state: restarted
+
