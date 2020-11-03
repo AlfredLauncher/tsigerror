@@ -1,0 +1,26 @@
+---
+- name: Intall MySQL exporter
+  apt:
+    name: mysqld-exporter
+    force_apt_get: yes
+
+- name: Create system user agama
+  user:
+    name: agama
+    state: present
+    system: yes
+
+- name: Install Bind9 exporter
+  apt:
+    name: bind9-exporter
+    force_apt_get: yes
+
+- name: Install Bind9 exporter
+  apt:
+    name: nginx-exporter
+    force_apt_get: yes
+
+- name: Intall grafana
+  apt:
+    name: mysqld-exporter
+    force_apt_get: yes
