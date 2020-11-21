@@ -11,7 +11,6 @@ $TTL	604800
 {% for r in dns_record %}
 {{ r.name }}   				 IN  {{ r.type }} {{ r.ip }}
 {% endfor %}
-
-#{% for c in dns_cnames %}
-#{{ c.cname }}               IN  {{ c.type }} {{ c.real }}
-#{% endfor %}
+{% for c in dns_cnames %}
+{{ c.cname }}               IN  {{ c.type }} {{ c.real }}
+{% endfor %}

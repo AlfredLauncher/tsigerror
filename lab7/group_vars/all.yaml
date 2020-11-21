@@ -1,18 +1,55 @@
-dns_forwarders:
-  - 8.8.8.8
+mysql_host: 192.168.42.55
+mysql_database: agama
+mysql_user: agama
+mysql_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          34653432616137393864353932396238633861643637643937626632326161356633653466633765
+          3764656431323164346238376664393533653130376164340a633836303734666333653337643062
+          36396666376531306336306234383166626133643833666566663032633166396132383039386532
+          3733353964333464300a343662613432656134636135636366393630366530343932303333343334
+          3534
 
-rev_domain: 42.168.192.in-addr.arpa
+mysql_exporter_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          31323231386334333862643432386330336633663361613466333237636630643332363563303537
+          3635643638323336353664653437313331616335373931650a653534343934653765633035323037
+          62613331393036303030333431326363393839366530623638393262626639356135326435323462
+          6636383237373962650a363733363631616565323266373433636536663333373639313261666633
+          3133
 
-hostname: adattiva
-domain: adattiva.xyz
+domain: jetstreamer.ryo
+startup_name: jetstreamer
 
-reverse_domain:
- - reverse: 42.168.192.in-addr.arpa.
+dns_cnames:
+  - cname: ns
+    real: "{{ groups['dns_server'][0] }}"
+    type: CNAME
+  - cname: prometheus
+    real: "{{ groups['prometheus'][0] }}"
+    type: CNAME
+  - cname: db
+    real: "{{ groups['db_servers'][0] }}"
+    type: CNAME
+  - cname: www
+    real: "{{ groups['web_servers'][0] }}"
+    type: CNAME
+  - cname: grafana
+    real: "{{ groups['grafana'][0] }}"
+    type: CNAME
 
-dns_record:
- - name: vm1
-   type: A
-   ipaddress: 192.168.42.30
- - name: vm2
-   type: A
-   ipaddress: 192.168.42.28
+prometheus_jobs:
+  - name: node
+    targets: "{{ groups['all'] }}"
+    port: 9100
+  - name: bind
+    targets:
+      - "{{ groups['dns_server'][0] }}"
+    port: 9119
+  - name: mysql
+    targets:
+      - "{{ groups['db_servers'][0] }}"
+    port: 9104
+  - name: www
+    targets:
+      - "{{ groups['web_servers'][0] }}"
+    port: 9113

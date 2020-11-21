@@ -10,7 +10,9 @@
   gather_facts: no
   roles:
     - bind
-    - bind_exporter
+    - Bind9_Exporter
+  tags:
+    - bind
 
 - name: Resolver
   hosts: all
@@ -26,7 +28,9 @@
   roles:
     - agama
     - uwsgi
-    - nginx_exporter
+    - Nginx_Exporter
+  tags:
+    - nginx
 
 - name: Database server
   hosts: db_servers
@@ -34,7 +38,7 @@
   gather_facts: no
   roles:
     - mysql
-    - mysql_exporter
+    - MySQL_Exporter
 
 - name: Prometheus
   hosts: prometheus
@@ -48,6 +52,8 @@
   become: yes
   gather_facts: no
   roles:
+    - Grafana
+  tags:
     - grafana
 
 - name: Node Exporter

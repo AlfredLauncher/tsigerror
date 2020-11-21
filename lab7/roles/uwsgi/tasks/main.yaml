@@ -1,37 +1,37 @@
 ---
- - name: installing package uwsgi
-   apt:
-     name: uwsgi
+- name: install uwsgi
+  become: yes
+  apt:
+    name: uwsgi
+    state: latest
 
- - name: installing package uwsgi-plugin-python3
-   apt:
-     name: uwsgi-plugin-python3
+- name: install uwsgi-plugin-python3
+  become: yes
+  apt:
+    name: uwsgi-plugin-python3
+    state: latest
 
- - name: create config file
-   file:
-     path: /etc/uwsgi/apps-enabled/agama.ini
-     state: touch
-     remote_src: yes
+- name: Create a directory
+  file:
+    path: /etc/uwsgi/apps-enabled
+    state: directory
 
- - name: making uwsgi config file
-   copy:
-     dest: /etc/uwsgi/apps-enabled/agama.ini
-     content: |
-      [uwsgi]
-      chdir = /opt/agama/
-      module = agama:app
-      env = AGAMA_DATABASE_URI=sqlite:////opt/agama/test.sqlite3
-      socket = localhost:5000
-      uid = agama
+# - name: add uwsgi config file
+#   copy:
+#     src: agama.ini
+#     dest: /etc/uwsgi/apps-enabled/agama.ini
+#   notify: restart uwsgi
 
- - name: restarting
-   service:
-     name: uwsgi
-     state: restarted
+- name: Copy uWSGI configuration
+  template:
+    src: agama.ini.j2
+    dest: /etc/uwsgi/apps-enabled/agama.ini
+    force: yes
+  notify: restart uwsgi
 
- - name: configuring to start on boot
-   service:
-     name: uwsgi
-     state: started
-   become: true
-   become_user: agama
+- name: ensure that uwsgi is started
+  become: yes
+  service:
+    name: uwsgi
+    state: started
+    enabled: yes   
