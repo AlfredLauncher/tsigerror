@@ -12,7 +12,7 @@ reverse_domain:
 dns_record:
  - name: vm1
    type: A
-   ipaddress: 192.168.42.30
+   ipaddress: 192.168.42.13
  - name: vm2
    type: A
-   ipaddress: 192.168.42.28
+   ipaddress: 192.168.42.43
