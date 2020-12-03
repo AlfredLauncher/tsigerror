@@ -9,3 +9,6 @@ vm1
 
 [db_servers]
 vm2
+
+[db_servers]
+vm2
