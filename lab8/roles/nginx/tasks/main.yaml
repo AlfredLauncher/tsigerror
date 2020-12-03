@@ -1,0 +1,21 @@
+---
+ - name: ensure nginx is at the latest version
+   apt:
+     name: nginx
+
+ - name: start nginx
+   service:
+      name: nginx
+      state: started
+
+ - name: Copying pinger.sh to directory
+   template:
+    src: pinger.sh
+    dest: /usr/local/bin/pinger
+    force: yes
+
+ - name: restart nginx
+   service:
+      name: nginx
+      state: restarted
+   become: yes
