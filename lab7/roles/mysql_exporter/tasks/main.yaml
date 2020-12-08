@@ -12,7 +12,7 @@
 - name: Copy .my.cnf
   template:
     src: .my.cnf.j2
-    dest: /var/lib/prometheus/.my.cnf
+    dest: ~/.my.cnf
   notify: Restart MySQL exporter
 
 - name: Create MySQL user
