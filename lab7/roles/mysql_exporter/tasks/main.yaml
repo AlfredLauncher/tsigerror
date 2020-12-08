@@ -8,13 +8,6 @@
   apt:
     name: python3-pymysql
     force_apt_get: yes
-
-- name: making mysql config file
-  copy:
-    dest: /etc/mysql/mysql.conf.d/override.cnf
-    content: |
-      [mysqld]
-      bind-address = 8.8.8.8
       
 - name: Copy .my.cnf
   template:
