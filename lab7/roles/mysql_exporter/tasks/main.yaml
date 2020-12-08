@@ -25,9 +25,9 @@
 - name: Creating database
   mysql_db:
     name: exporter
-    state=present
-    login_user= exporter 
-    login_password= "{{ mysql_exporter_password }}" 
+    state: present
+    login_user: exporter 
+    login_password: "{{ mysql_exporter_password }}" 
 
 - name: Create MySQL user
   mysql_user:
