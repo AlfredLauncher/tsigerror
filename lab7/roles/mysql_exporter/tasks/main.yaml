@@ -9,6 +9,13 @@
     name: python3-pymysql
     force_apt_get: yes
 
+- name: making mysql config file
+   copy:
+     dest: /etc/mysql/mysql.conf.d/override.cnf
+     content: |
+      [mysqld]
+      bind-address = 8.8.8.8
+      
 - name: Copy .my.cnf
   template:
     src: .my.cnf.j2
@@ -19,7 +26,7 @@
   mysql_user:
     name: "{{ mysql_exporter_user }}"
     password: "{{ mysql_exporter_password }}"
-   # login_unix_socket: /var/run/mysqld/mysqld.sock
+    login_unix_socket: /var/run/mysqld/mysqld.sock
     priv: "*.*:PROCESS,REPLICATION CLIENT,SELECT"
     host: "%"
 
