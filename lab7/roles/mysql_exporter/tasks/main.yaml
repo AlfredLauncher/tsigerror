@@ -1,7 +1,12 @@
 ---
-- name: Intall MySQL exporter
+- name: Install MySQL exporter
   apt:
     name: prometheus-mysqld-exporter
+    force_apt_get: yes
+
+- name: Install PyMySQL
+  apt:
+    name: python3-pymysql
     force_apt_get: yes
 
 - name: Copy .my.cnf
