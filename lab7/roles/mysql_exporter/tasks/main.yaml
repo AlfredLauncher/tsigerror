@@ -8,11 +8,18 @@
   apt:
     name: python3-pymysql
     force_apt_get: yes
-      
+
+- name: Ensure mysql is running and starts on boot
+  service:
+    name: mysql
+    state: started
+    enabled: yes
+  become: yes
+
 - name: Copy .my.cnf
   template:
     src: .my.cnf.j2
-    dest: ~/.my.cnf
+    dest: /var/lib/prometheus/.my.cnf
   notify: Restart MySQL exporter
 
 - name: Create MySQL user
