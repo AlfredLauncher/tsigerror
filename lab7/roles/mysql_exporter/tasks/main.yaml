@@ -19,7 +19,7 @@
 - name: Copy .my.cnf
   template:
     src: .my.cnf.j2
-    dest: /var/lib/prometheus/.my.cnf
+    dest: /root/.my.cnf
   notify: Restart MySQL exporter
 
 - name: Creating database
