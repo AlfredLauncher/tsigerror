@@ -12,3 +12,6 @@ vm2
 
 [dns_servers]
 vm2
+
+[grafana]
+vm2
