@@ -16,3 +16,17 @@ dns_record:
  - name: vm2
    type: A
    ipaddress: 192.168.42.43
+   
+prometheus_jobs:
+  - name: bind
+    target: vm2
+    port: 9119
+  - name: mysql
+    target: vm2
+    port: 9104
+  - name: mysql-ha
+    target: vm1
+    port: 9104
+  - name: nginx
+    target: vm1
+    port: 9113   
