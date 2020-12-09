@@ -2,6 +2,7 @@
 - name: Install MySQL Exporter
   hosts: db_servers
   become: yes
+  gather_facts: no
   roles:
     - mysql_exporter
 
