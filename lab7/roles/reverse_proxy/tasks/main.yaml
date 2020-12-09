@@ -1,5 +1,5 @@
 ---
-- name: Intall Nginx
+- name: Install Nginx
   apt:
     name: nginx
     state: present
