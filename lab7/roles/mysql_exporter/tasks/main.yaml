@@ -24,6 +24,7 @@
 
 - name: Create MySQL user
   mysql_user:
+    name: exporter
     login_user: root
     login_unix_socket: /var/run/mysqld/mysqld.sock
     priv: "*.*:PROCESS,REPLICATION CLIENT,SELECT"
