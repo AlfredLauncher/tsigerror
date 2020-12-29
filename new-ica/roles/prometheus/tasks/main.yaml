@@ -1,5 +1,5 @@
 ---
-- name: Intall Prometheus
+- name: Install Prometheus
   apt:
     name: 
       - prometheus
