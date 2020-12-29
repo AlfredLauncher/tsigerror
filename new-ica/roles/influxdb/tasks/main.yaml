@@ -1,0 +1,22 @@
+---
+- name: Install influxdb
+  apt:
+    name: 
+      - influxdb
+      - influxdb-client
+    force_apt_get: yes
+
+# > influx
+# > create database latency 
+# > use latency
+
+- name: Install Telegraf
+  apt:
+    deb: https://dl.influxdata.com/telegraf/releases/telegraf_1.16.0-1_amd64.deb
+    force_apt_get: yes
+
+- name: Install Telegraf
+  template:
+    src: telegraf.conf.j2
+    dest: /etc/telegraf/telegraf.conf
+  notify: Restart Telegraf

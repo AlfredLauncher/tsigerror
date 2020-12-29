@@ -1,0 +1,17 @@
+---
+- name: Collect information about all VMs
+  hosts: all
+  tasks:
+    - setup:
+
+- name: DNS servers
+  hosts: dns_servers
+  become: yes
+  roles:
+    - bind
+
+- name: Change resolv.conf
+  hosts: all
+  become: yes
+  roles:
+    - resolv
