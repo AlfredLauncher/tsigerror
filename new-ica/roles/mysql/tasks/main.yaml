@@ -3,11 +3,7 @@
   apt:
     name: 
       - mysql-server
-      
-- name: Install pymysql
-  pip:
-    name: 
-      - pymysql
+      - python3-pymysql
     state: present
 
 # lab04
