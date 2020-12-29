@@ -3,8 +3,7 @@
   apt:
     name: 
       - mysql-server
-      - python-pymysql
-    force_apt_get: yes
+      - python3-pymysql
 
 # lab04
 # - name: Copy MySQL server configuration
