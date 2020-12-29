@@ -3,7 +3,11 @@
   apt:
     name: 
       - mysql-server
-      - python3-pip
+      - python3-pymysql
+      
+- name: Install MySQL server
+  pip:
+    name: 
       - python3-pymysql
 
 # lab04
