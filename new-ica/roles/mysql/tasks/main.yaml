@@ -3,12 +3,12 @@
   apt:
     name: 
       - mysql-server
-      - python3-pymysql
       
-- name: Install MySQL server
+- name: Install pymysql
   pip:
     name: 
-      - python3-pymysql
+      - pymysql
+    state: present
 
 # lab04
 # - name: Copy MySQL server configuration
