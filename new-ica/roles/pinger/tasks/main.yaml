@@ -21,7 +21,11 @@
     src: pinger.conf.j2
     dest: /etc/pinger/pinger.conf
     mode: '0644'
-  notify: Restart influxdb
+    
+- name: Restart InfluxDB
+  service:
+    name: influxdb
+    state: restarted
 
 - name: Copy pinger.sh
   copy:
