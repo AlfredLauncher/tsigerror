@@ -31,10 +31,13 @@
   copy:
     src: pinger.sh
     dest: /usr/local/bin/pinger
-    mode: '0755' # must be executable(5), not (4)
-  notify: Restart influxdb
+    mode: '0755'
 
-# Run /usr/local/bin/pinger
+- name: Restart InfluxDB
+  service:
+    name: influxdb
+    state: restarted
+    
 - name: Make service unit
   copy:
     src: pinger.service
