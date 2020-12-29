@@ -5,6 +5,7 @@ rev_domain: 42.168.192.in-addr.arpa
 
 hostname: adattiva
 domain: adattiva.xyz
+startup_name: adattiva
 
 reverse_domain:
  - reverse: 42.168.192.in-addr.arpa.
