@@ -20,6 +20,6 @@
 
 - name: Configure master zone
   template: 
-    src: db.premiumfriday.j2
+    src: db.adattiva.j2
     dest: /etc/bind/db.{{ startup_name }}/db.{{ startup_name }}.zone
   notify: Restart Bind9
