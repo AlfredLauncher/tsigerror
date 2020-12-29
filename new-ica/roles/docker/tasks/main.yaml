@@ -1,9 +1,20 @@
-- name: Install Docker package
-  apt:
-    name:
-      - python3-docker
-      - docker.io
-    force_apt_get: yes
+- name: Checking docker on latest version
+  apt: name=docker.io state=latest
+
+- name: Checking python
+  apt: name=python state=latest
+
+- name: Checking docker-compose on latest version
+  apt: name=docker-compose state=latest
+  
+#- name: Install Docker package
+ # apt:
+  #  name:
+   #   - python3-docker
+    #  - docker.io
+     # - python36-docker
+      #- docker-componse 
+    #force_apt_get: yes  
 
 - name: Start Docker
   service:
