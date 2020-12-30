@@ -1,6 +1,10 @@
 dns_forwarders:
   - 8.8.8.8
 
+subnets:
+  - 192.168.42.0/24;
+  - 127.0.0.0/8;
+
 rev_domain: 42.168.192.in-addr.arpa
 
 hostname: adattiva
