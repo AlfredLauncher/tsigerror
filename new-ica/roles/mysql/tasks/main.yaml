@@ -5,7 +5,7 @@
       - mysql-server
       - python3-pymysql
     state: present
-  cache_update: yes
+    cache_update: yes
 # lab04
 # - name: Copy MySQL server configuration
 #   copy:
