@@ -1,5 +1,0 @@
-/home/juri - added
-/home/roman - added
-/home/juri/.ssh/authorized_keys -added
-/home/roman/.ssh/authorized_keys -added
-nginx - started

@@ -1,7 +1,0 @@
-scrape_configs:
-  - job_name: linux
-    static_configs:
-      - targets:
-   {% for vm in groups['all'] %}
-        - {{ hostvars[vm]['inventory_hostname'] }}.{{ domain }} 
-   {% endfor %}

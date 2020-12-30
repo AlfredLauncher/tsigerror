@@ -1,7 +1,0 @@
----
-  - hosts: vm2
-    tasks:
-      - debug: msg="REPLY from {{ ansible_facts['nodename'] }}..."
-    roles:
-      - bind
-    become: yes

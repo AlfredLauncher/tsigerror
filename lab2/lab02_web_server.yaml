@@ -1,7 +1,0 @@
----
-  - name: Web server for lab 2
-    become: yes
-    hosts: web_servers
-    roles:
-      - users
-      - nginx
