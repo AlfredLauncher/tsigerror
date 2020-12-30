@@ -35,7 +35,7 @@ server {
         proxy_pass http://127.0.0.1:9113/metrics;
     }
     {% endif %}
-    {% if inventory_hostname in groups['dns_server'] %}
+    {% if inventory_hostname in groups['dns_servers'] %}
     location /bind-metrics {
         proxy_pass http://127.0.0.1:9119/metrics;
     }
