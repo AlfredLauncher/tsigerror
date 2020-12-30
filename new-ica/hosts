@@ -22,3 +22,17 @@ vm1
 
 [influxdb]
 vm2
+
+[dns_masters]
+vm2
+
+[dns_slaves]
+vm1
+
+[dns_server:children]
+dns_masters
+dns_slaves
+
+[haproxy]
+vm1
+vm2
