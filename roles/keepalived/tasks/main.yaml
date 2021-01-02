@@ -28,3 +28,17 @@
     name: keepalived-prometheus-exporter
     state: started
     enabled: yes
+
+- name: Restart keepalived
+  service:
+    name: keepalived
+    state: restarted
+
+- name: Systemctl daemon-reload
+  shell: "systemctl daemon-reload"
+    
+- name: Restart keepalived exporter
+  service:
+    name: keepalived-exporter
+    state: restarted
+    
