@@ -33,9 +33,6 @@
   service:
     name: keepalived
     state: restarted
-
-- name: Systemctl daemon-reload
-  shell: "systemctl daemon-reload"
     
 - name: Restart keepalived exporter
   service:
