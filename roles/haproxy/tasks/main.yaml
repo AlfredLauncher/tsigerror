@@ -16,20 +16,20 @@
     state: started
     enabled: yes
 
-- name: HAProxy exporter setup shrshryo-1
+- name: HAProxy exporter setup for vm1
   docker_container:
     name: haproxy_exporter
     image: quay.io/prometheus/haproxy-exporter:v0.9.0
     ports:
       - "9101:9101"
-    command: --haproxy.scrape-uri="http://shrshryo-1:88/haproxy?stats;csv"
-  when: inventory_hostname == "shrshryo-1"
+    command: --haproxy.scrape-uri="http://vm1:88/haproxy?stats;csv"
+  when: inventory_hostname == "vm1"
 
-- name: HAProxy exporter setup shrshryo-2
+- name: HAProxy exporter setup for vm2
   docker_container:
     name: haproxy_exporter
     image: quay.io/prometheus/haproxy-exporter:v0.9.0
     ports:
       - "9101:9101"
-    command: --haproxy.scrape-uri="http://shrshryo-2:88/haproxy?stats;csv"
-  when: inventory_hostname == "shrshryo-2"
+    command: --haproxy.scrape-uri="http://vm2:88/haproxy?stats;csv"
+  when: inventory_hostname == "vm22"
