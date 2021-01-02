@@ -39,6 +39,7 @@
     
 - name: Restart keepalived exporter
   service:
-    name: keepalived-exporter
+    name: keepalived-prometheus-exporter
     state: restarted
+    enabled: yes
     
