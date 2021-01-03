@@ -48,8 +48,8 @@
     record: "{{ item['subdomain'] }}.{{ domain }}"
     value: "{{ item['ip'] }}"
     type: "A"
-  #loop: "{{ a_record }}"
-  #when: inventory_hostname == groups['dns_masters'][0]
+  loop: "{{ a_record }}"
+  when: inventory_hostname == groups['dns_masters'][0]
  # vars:
   #   ns_update_secret: !vault |
    #       $ANSIBLE_VAULT;1.1;AES256
