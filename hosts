@@ -33,10 +33,13 @@ vm1
 dns_masters
 dns_slaves
 
-[app_stack]
+[application]
 vm1
 vm2
 
 [haproxy]
 vm1
 vm2
+
+[internal]
+vm3
