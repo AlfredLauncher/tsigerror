@@ -8,15 +8,15 @@ $TTL	604800
 ;
 
 	IN  NS			 vm2.{{ domain }}.
-	IN  A			 {{ dns_record[1].ip }}
-	IN  A			 {{ dns_record[2].ip }}
-	IN  A			 {{ dns_record[3].ip }}
+	IN  A			 {{ dns_record[1].ipaddress }}
+	IN  A			 {{ dns_record[2].ipaddress }}
+	IN  A			 {{ dns_record[3].ipaddress }}
 {% for d in dns_record %}
-{{ d.name }}   				 IN  {{ d.type }} {{ d.ip }}
+{{ d.name }}   				 IN  {{ d.type }} {{ d.ipaddress }}
 {% endfor %}
 
 {% if inventory_hostname in groups['grafana'] %}
-{{ influxdb }}	IN {{ dns_record[1].type }} {{ dns_record[1].ip }}
+{{ influxdb }}	IN {{ dns_record[1].type }} {{ dns_record[1].ipaddress }}
 {% endif %}
 
 backup	IN	A	{{ backup }}

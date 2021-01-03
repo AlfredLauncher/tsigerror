@@ -13,10 +13,10 @@ reverse_domain:
 dns_record:
  - name: vm1
    type: A
-   ipaddress: 192.168.42.14
+   ipaddress: 192.168.42.20
  - name: vm2
    type: A
-   ipaddress: 192.168.42.26
+   ipaddress: 192.168.42.40
    
 prometheus_jobs:
   - name: bind
