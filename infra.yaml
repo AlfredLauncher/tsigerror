@@ -18,6 +18,8 @@
   become: yes
   roles:
     - bind
+  tasks:
+    - include_vars: vault1.yml
 
 - name: Resolver
   hosts: all
