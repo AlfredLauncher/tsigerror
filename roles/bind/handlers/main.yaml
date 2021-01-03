@@ -5,3 +5,5 @@
     state: restarted
     enabled: yes
 
+- name: Rndc reload
+  shell: rndc reload
