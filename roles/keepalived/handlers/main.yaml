@@ -1,20 +1,14 @@
 ---
-- name: Restart MySQL exporter
-  service:
-    name: prometheus-mysqld-exporter
-    state: restarted
-
 - name: Restart keepalived
   service:
     name: keepalived
     state: restarted
 
-- name: Restart keepalived exporter 
+- name: Systemctl daemon-reload
+  shell: "systemctl daemon-reload"
+
+- name: Restart keepalived exporter
   service:
     name: keepalived-prometheus-exporter
     state: restarted
-    
-- name: Systemctl daemon-reload
-  shell: "systemctl daemon-reload"
-    
-   
+    enabled: yes
