@@ -11,12 +11,6 @@
   notify: 
     - Restart HAProxy
 
-- name: start HAProxy
-  service:
-    name: haproxy
-    state: started
-    enabled: yes
-
 - name: HAProxy exporter setup for vm1
   docker_container:
     name: haproxy_exporter
