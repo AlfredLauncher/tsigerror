@@ -10,7 +10,6 @@ $TTL	604800
 	IN  NS	                 {{ dns_record[1].name }}.{{ domain }}.
 	IN  A			 {{ dns_record[1].ipaddress }}
 	IN  A			 {{ dns_record[2].ipaddress }}
-	IN  A			 {{ dns_record[3].ipaddress }}
 {% for vm in groups['dns_servers'] %}
 {{ domain }}   				 IN NS  {{ vm }}.{{ domain }}.
 {% endfor %}
