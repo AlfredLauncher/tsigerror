@@ -1,0 +1,9 @@
+---
+- name: Ansible connection test
+  hosts: app_stack
+  roles:
+    - test_connection
+    - agama
+    - agama_docker
+    - mysql
+    
