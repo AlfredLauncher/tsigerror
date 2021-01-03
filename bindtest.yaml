@@ -1,0 +1,7 @@
+- name: DNS servers
+  hosts: dns_server
+  become: yes
+  roles:
+    - bind
+  vars_files:
+    - vault1.yml
