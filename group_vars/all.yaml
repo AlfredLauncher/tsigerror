@@ -140,4 +140,4 @@ prometheus_jobs:
     
 a_record:
   - subdomain: backup
-    ip: 192.168.42.156    
+    ipaddress: 192.168.42.156    
