@@ -16,8 +16,6 @@
 - name: DNS servers
   hosts: dns_server
   become: yes
-  tasks:
-    - include_vars: /home/aadmiral/.ansible/vault_pass2.yml
   roles:
     - bind
 
