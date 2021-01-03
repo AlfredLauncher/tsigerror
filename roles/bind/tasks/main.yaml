@@ -46,7 +46,7 @@
     server: "{{ hostvars[groups['dns_masters'][0]]['ansible_default_ipv4']['address'] }}"
     zone: "{{ domain }}"
     record: "{{ item['subdomain'] }}.{{ domain }}"
-    value: "{{ item['ipaddress'] }}"
+    value: "{{ item['ip'] }}"
     type: "A"
   loop: "{{ a_record }}"
   when: inventory_hostname == groups['dns_masters'][0]

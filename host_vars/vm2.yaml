@@ -13,3 +13,6 @@ dns_record:
  - name: vm2
    type: A
    ipaddress: 192.168.42.40
+ - name: backup
+   type: A
+   ipaddress: 192.168.42.156
