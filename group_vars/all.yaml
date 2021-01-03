@@ -58,7 +58,7 @@ ns_transfer_secret: !vault |
           6130646232303039330a616364643965643265653466333562643635356639646266646662386535
           38396165663761616631646532396430336138623064626232663738353631636532
 
-ns_update_secret: '{{ vault_password_file }}'
+ns_update_secret: '{{ master_pass }}'
                  
 influxdb: influxdb
 
