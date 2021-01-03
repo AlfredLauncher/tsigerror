@@ -20,20 +20,6 @@ dns_record:
  - name: backup
    type: A
    ipaddress: 192.168.42.156
-       
-prometheus_jobs:
-  - name: bind
-    target: vm2
-    port: 9119
-  - name: mysql
-    target: vm2
-    port: 9104
-  - name: mysql-ha
-    target: vm1
-    port: 9104
-  - name: nginx
-    target: vm1
-    port: 9113   
     
 mysql_host: vm2
 mysql_database: agama
@@ -89,3 +75,30 @@ dns_cnames:
   - cname: haproxy-2
     real: "{{ groups['haproxy'][1] }}"
     type: CNAME
+
+prometheus_jobs:
+  - name: node
+    targets: "{{ groups['all'] }}"
+    port: 9100
+  - name: bind
+    targets:
+      - "{{ groups['all'] }}"
+    port: 9119
+  - name: mysql
+    targets:
+      - "{{ groups['all'] }}"
+    port: 9104
+  - name: www
+    targets:
+      - "{{ groups['all'] }}"
+    port: 9113
+  - name: haproxy
+    targets: "{{ groups['all'] }}"
+    port: 9101
+  - name: keepalived
+    targets: "{{ groups['all'] }}"
+    port: 9165
+    
+a_record:
+  - subdomain: backup
+    ip: 192.168.42.156    

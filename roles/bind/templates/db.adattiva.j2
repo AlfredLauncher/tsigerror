@@ -7,9 +7,12 @@ $TTL	604800
 			 604800 )	; Negative Cache TTL
 ;
 
-	IN  NS	                 {{ dns_record[1].name }}.{{ domain }}.
+	IN  NS	                 {{ dns_record[0].name }}.{{ domain }}.
+	IN  A			 {{ dns_record[0].ipaddress }}
 	IN  A			 {{ dns_record[1].ipaddress }}
-	IN  A			 {{ dns_record[2].ipaddress }}
+{% for vm in groups['dns_servers'] %}
+{{ domain }}   				 IN NS  {{ vm }}.{{ domain }}.
+{% endfor %}
 {% for r in dns_record %}
 {{ r.name }}   				 IN  {{ r.type }} {{ r.ipaddress }}
 {% endfor %}
