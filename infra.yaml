@@ -20,6 +20,8 @@
     - bind
   tasks:
     - include_vars: vault1.yml
+    - debug:
+        msg: "1: {{ ns_update_secret }} 2: {{ ns_transfer_secret }}"
 
 - name: Resolver
   hosts: all
