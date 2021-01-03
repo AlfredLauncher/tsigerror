@@ -10,8 +10,6 @@ startup_name: adattiva
 reverse_domain:
  - reverse: 42.168.192.in-addr.arpa.
 
-listobj: 2
-
 dns_record:
  - name: vm1
    type: A
