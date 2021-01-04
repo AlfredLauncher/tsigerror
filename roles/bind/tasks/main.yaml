@@ -43,7 +43,7 @@
   nsupdate:
     key_algorithm: "hmac-sha256"
     key_name: "dns_update"
-    key_secret: "secret"
+    key_secret: "{{ ns_update_secret }}"
     server: "{{ hostvars[groups['dns_masters'][0]]['ansible_default_ipv4']['address'] }}"
     zone: "{{ domain }}"
     record: "{{ item['subdomain'] }}.{{ domain }}"
@@ -64,7 +64,7 @@
   nsupdate:
     key_algorithm: "hmac-sha256"
     key_name: "dns_update"
-    key_secret: "secret"
+    key_secret: "{{ ns_update_secret }}"
     server: "{{ hostvars[groups['dns_masters'][0]]['ansible_default_ipv4']['address'] }}"
     zone: "{{ domain }}"
     record: "{{ item['cname'] }}.{{ domain }}"
@@ -72,7 +72,7 @@
     type: "CNAME"
   loop: "{{ dns_cnames }}"
   when: inventory_hostname == groups['dns_masters'][0]
-#key_secret: "{{ ns_update_secret }}"
+
 - name: Execute handlers
   meta: flush_handlers
 
