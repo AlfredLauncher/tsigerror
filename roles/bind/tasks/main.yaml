@@ -1,0 +1,25 @@
+---
+- name: Intall Bind9
+  apt:
+    name: 
+      - bind9
+    state: present
+    force_apt_get: yes
+    update_cache: yes
+
+- name: Configure DNS forwarders, ACL, master zone
+  template:
+    src: named.conf.options.j2
+    dest: /etc/bind/named.conf.options
+  notify: Restart Bind9
+    
+- name: Make /etc/bind/db.{{ startup_name }}  directory
+  file:
+    path: /etc/bind/db.{{ startup_name }} 
+    state: directory
+
+- name: Configure master zone
+  template: 
+    src: db.adattiva.j2
+    dest: /etc/bind/db.{{ startup_name }}/db.{{ startup_name }}.zone
+  notify: Restart Bind9

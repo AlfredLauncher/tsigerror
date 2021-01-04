@@ -1,0 +1,7 @@
+---
+- name: Intall Node Exporters
+  apt:
+    name: 
+      - prometheus-node-exporter
+    update_cache: yes
+    force_apt_get: yes

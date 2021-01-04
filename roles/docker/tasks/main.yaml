@@ -1,0 +1,25 @@
+- name: Checking docker on latest version
+  apt: name=docker.io
+
+- name: Checking docker's other component
+  apt: name=python3-docker
+
+- name: Checking python
+  apt: name=python3 state=latest
+  
+#- name: Install Docker package
+ # apt:
+  #  name:
+   #   - python3-docker
+    #  - docker.io
+     # - python36-docker
+      #- docker-componse 
+    #force_apt_get: yes  
+
+- name: Start Docker
+  service:
+    name: docker
+    state: started
+    enabled: yes
+    
+    

@@ -1,0 +1,38 @@
+vm1 ansible_host=193.40.156.86 ansible_port=1422 ansible_ssh_user=ubuntu ansible_python_interpreter=python3
+vm2 ansible_host=193.40.156.86 ansible_port=2622 ansible_ssh_user=ubuntu ansible_python_interpreter=python3
+
+[web_servers]
+vm1
+
+[app_servers]
+vm1
+
+[db_servers]
+vm2 mysql_server_id=64
+vm1 mysql_server_id=96
+
+[dns_servers]
+vm2
+
+[grafana]
+vm2
+
+[prometheus]
+vm1
+
+[influxdb]
+vm2
+
+[dns_masters]
+vm2
+
+[dns_slaves]
+vm1
+
+[dns_server:children]
+dns_masters
+dns_slaves
+
+[haproxy]
+vm1
+vm2
