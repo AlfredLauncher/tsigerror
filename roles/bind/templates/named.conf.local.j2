@@ -1,3 +1,9 @@
+key "dns-update" {
+        algorithm HMAC-SHA512;
+        secret "KEYREDACTED==";
+};
+
+
 zone "{{ domain }}" {
     type master;
     file "/var/lib/bind/db.{{ startup_name }}";
