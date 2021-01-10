@@ -1,56 +1,51 @@
----
-- name: Install MySQL server
+- name: Install mysql server
+  apt:
+    name: mysql-server
+    state: latest
+
+
+- name: Install Pymsql
   apt:
     name: 
-      - mysql-server
-      - python3-pymysql
-    state: present
-    update_cache: yes
-# lab04
-# - name: Copy MySQL server configuration
-#   copy:
-#     src: override.cnf
-#     dest: /etc/mysql/mysql.conf.d/override.cnf
-#     force: yes
-#   notify: Restart MySQL server
-# lab04
+    - python3-pymysql
+    state: latest
 
-# lab11
-- name: Copy MySQL server configuration
+
+- name: Override MySQL config and Restart 
   template:
-    src: override.cnf.j2
-    dest: /etc/mysql/mysql.conf.d/override.cnf
-  notify: Restart MySQL server
-# lab11
+    src: override.cnf
+    dest: /etc/mysql/mysql.conf.d/
+  notify: restart mysql
 
-- name: MySQL database
+- name: Create MySQL database 
   mysql_db:
     name: "{{ mysql_database }}"
-    login_unix_socket: /var/run/mysqld/mysqld.sock
+    login_unix_socket: /var/run/mysqld/mysqld.sock  
 
-- name: Create MySQL user
+
+- name: Create database user with limited privileges
   mysql_user:
-    name: "{{ mysql_database }}"
+    name: "{{ mysql_user }}"
     password: "{{ mysql_password }}"
-    priv: "{{ mysql_database }}.*:ALL"
-    login_unix_socket: /var/run/mysqld/mysqld.sock
+    priv: '{{ mysql_database }}.*:ALL'
     host: "%"
-
-# lab10
-- name: Create MySQL user for backup
-  mysql_user:
-    name: backup
-    password: "{{ mysql_password }}"
-    priv: "{{ mysql_database }}.*:ALL"
     login_unix_socket: /var/run/mysqld/mysqld.sock
-# lab10
+  no_log: true
 
-# lab11
-- name: Create MySQL user for replication
+
+ # Replication, Lab 11
+
+- name: Create MySQL replication user
   mysql_user:
-    name: replication
-    password: "{{ mysql_password }}"
+    name: "{{ mysql_replication_user }}"
+    password: "{{ mysql_replication_pass }}"
     priv: "*.*:REPLICATION SLAVE"
-    login_unix_socket: /var/run/mysqld/mysqld.sock
     host: "%"
-     
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+
+- name: Start MySQL server
+  service:
+    name: mysql
+    state: started
+    enabled: yes

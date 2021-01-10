@@ -1,0 +1,13 @@
+# According to backup SLA: backups should be done automatically at 1:00 (1 AM) every day
+
+0 1 * * * backup /home/backup/scripts/grafana.sh
+
+
+# Upload all the backups every day at 1:00 (1 AM)
+
+0 1 * * *  backup  duplicity --no-encryption full /home/backup/backup/ rsync://Nadezda123@backup.{{ domain }}//home/Nadezda123/
+
+
+# Delete old backups at 2:00 on the 1st day of the months
+
+0 2 1 * *  backup duplicity --no-encryption remove-all-but-n-full 28 --force rsync://Nadezda123@backup.{{ domain }}//home/Nadezda123/

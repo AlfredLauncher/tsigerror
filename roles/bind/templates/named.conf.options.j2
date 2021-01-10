@@ -1,29 +1,37 @@
-acl ica0002vpn {
-	{% for s in subnets %}
-	  {{ s }}
-	{% endfor %}
+# Lab 14
+
+key "{{ dns_transfer }}" {
+	algorithm hmac-sha256;
+	secret "{{ dns_transfer_key }}";
+
 };
+
+key "{{ dns_update }}" {
+	algorithm hmac-sha256;
+	secret "{{ dns_update_key }}";
+};
+
+
+
+acl allowed_networks { {%- for network in allowed_networks -%}
+       {{ network }};
+      {%- endfor -%}
+};
+
+
 
 options {
 	directory "/var/cache/bind";
 	forwarders {
-      {% for f in dns_forwarders %}
-	    {{ f }};
+      {% for address in dns_forwarders %}
+	    {{ address }};
       {% endfor %}
 	};
 	dnssec-validation no;
 	auth-nxdomain no;    # conform to RFC1035
-	allow-query {
-		ica0002vpn;
-	};
 };
 
-zone "{{ domain }}" IN {
-    type master;
-    file "/etc/bind/db.{{ startup_name }}/db.{{ startup_name }}.zone";
-    notify no;
-};
 
 statistics-channels {
-  inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
+   inet 127.0.0.1 port 8053 allow { 127.0.0.1; };
 };

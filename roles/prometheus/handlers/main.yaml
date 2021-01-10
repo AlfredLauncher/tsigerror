@@ -1,10 +1,9 @@
 ---
 - name: Restart Prometheus
-  service:
+  systemd:
     name: prometheus
     state: restarted
+    enabled: yes
+    daemon_reload: yes
 
-- name: Restart Nginx
-  service:
-    name: nginx
-    state: restarted
+

@@ -1,9 +1,14 @@
-server {
-        listen 80 default_server;
-        server_name _;
+#Old initial configuration, before Lab 7 - Grafana
 
-        location / {
-                uwsgi_pass 127.0.0.1:5000;
-                include uwsgi_params;
-        }
+server {
+	listen 80 default_server;
+        listen [::]:80 default_server;
+
+	server_name _;
+
+	location / {
+		include uwsgi_params;
+                #uwsgi_pass IP_address:Port
+                uwsgi_pass unix:/opt/agama/agama.sock;
+	}
 }

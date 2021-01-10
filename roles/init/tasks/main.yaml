@@ -1,0 +1,8 @@
+---
+ - setup:
+# no need to write update_cache in every role, it will be automatically updated with this file
+
+ - apt: 
+     update_cache: yes
+     cache_valid_time: "{{ 3600 * 24 }}"
+     force_apt_get: yes

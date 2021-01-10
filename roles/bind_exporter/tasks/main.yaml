@@ -1,11 +1,20 @@
 ---
-- name: Install Bind9 exporter
-  apt:
-    name: prometheus-bind-exporter
-    force_apt_get: yes
+ - name: User exporter
+   user:
+     name: prometheus
 
-- name: Make sure Bind9 exporter is enabed
-  service:
-    name: prometheus-bind-exporter
-    state: started
-    enabled: yes
+ - name: Install Bind9 Exporter Package
+   apt:
+     name: prometheus-bind-exporter
+     state: latest
+
+ - name: Wait for 10 sec and proceed
+   wait_for:
+     timeout: 10
+
+
+ - name: Enabled
+   service:
+     name: prometheus-bind-exporter
+     state: started
+     enabled: yes

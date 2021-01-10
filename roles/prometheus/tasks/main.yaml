@@ -1,18 +1,30 @@
 ---
-- name: Install Prometheus
+- name: Prometheus packages
   apt:
-    name: 
+    name:
       - prometheus
-    force_apt_get: yes
+    state: latest
+
+
+- name: Make Prometheus available
+  template:
+    src: prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+  notify: Restart Prometheus
+
 
 - name: Configure Prometheus
-  template: 
-    src: prometheus.yml.j2
+  template:
+    src: prometheus.yaml.j2
     dest: /etc/prometheus/prometheus.yml
   notify: Restart Prometheus
 
-- name: Make prometheus available
-  copy:
-    src: prometheus
-    dest: /etc/default/prometheus
-  notify: Restart Prometheus
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  meta: flush_handlers
+
+
+- name: Start service prometheus, if not started
+  service:
+    name: prometheus
+    state: started
+    enabled: yes

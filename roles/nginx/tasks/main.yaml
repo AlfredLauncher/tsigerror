@@ -1,26 +1,19 @@
----
-- name: Intall Nginx
+- name: Ensure nginx is installed and in working state
   apt:
     name: nginx
-    state: present
-    force_apt_get: yes
-  
-# lab02
-# - name: Serve index.html
-#   copy:
-#     src: ../files
-#     dest: /var/www/html
-# lab02
+    state: latest
 
-# lab03
-- name: Copy Nginx configuration
-  copy:
-    src: default
-    dest: /etc/nginx/sites-enabled/default
-  notify: Restart Nginx
 
-- name: Start Nginx
+- name: copy the nginx config file and restart nginx
+  template:
+    src: default.j2
+    dest: /etc/nginx/sites-available/default
+#    validate: nginx -t -c %s
+  notify: restart nginx
+
+
+- name: start nginx
   service:
     name: nginx
     state: started
-# lab03
+    enabled: yes 

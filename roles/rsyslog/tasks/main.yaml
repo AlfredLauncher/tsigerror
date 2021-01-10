@@ -1,7 +1,23 @@
 ---
-- name: Copy rsyslog config
-  template:
-    src: 51-telegraf.conf.j2
-    dest: /etc/rsyslog.d/51-telegraf.conf
-  notify: Restart rsyslog
-  
+  #Check if rsyslog is installed
+  - name: Install Rsyslog
+    apt:
+      name: rsyslog
+      state: latest
+
+  - name: Rsyslog config
+    template:
+      src: 51-telegraf.conf.j2
+      dest: /etc/rsyslog.d/51-telegraf.conf
+    notify:
+      - Restart rsyslog
+
+  - name: Force all notified handlers to run at this point, not waiting for normal sync points
+    meta: flush_handlers
+
+  - name: Start service rsyslog, if not started
+    service:
+      name: rsyslog
+      state: started
+      enabled: yes
+      

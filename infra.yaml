@@ -1,0 +1,162 @@
+---
+ - name: Collect information about all VMs
+   hosts: all
+   tasks:
+     - setup:
+
+ - name: Setup
+   hosts: all
+   become: yes
+   roles:
+     - init
+
+
+ - name: DNS servers
+   hosts: dns_servers
+   become: yes
+   roles:
+     - bind
+   tags:
+     - bind
+
+
+ - name: Prometheus
+   hosts: prometheus
+   become: yes
+   roles:
+     - prometheus
+   tags:
+     - prometheus
+
+
+
+ - name: Resolv
+   hosts: all
+   become: yes
+   roles:
+     - resolv
+   tags:
+     - resolv
+
+ - name: Nginx Reverse proxy
+   hosts: all
+   become: yes
+   gather_facts: no
+   roles:
+     - nginx
+     - nginx_exporter
+   tags:
+     - nginx
+
+
+ - name: database server
+   hosts: db_servers
+   become: yes
+   gather_facts: no
+   roles:
+     - mysql
+     - mysql_exporter
+   tags:
+     - mysql
+
+ - name: DNS servers
+   hosts: dns_servers
+   become: yes
+   roles:
+     - bind_exporter
+   tags:
+     - bind_exporter
+
+
+
+ - name: Influxdb
+   hosts: influxdb
+   become: yes
+   gather_facts: no
+   roles:
+     - influxdb
+   tags:
+     - influxdb
+
+
+
+ - name: General monitoring
+   hosts: all
+   become: yes
+   gather_facts: no
+   roles:
+     - node_exporter
+     - rsyslog
+   tags:
+     - rsyslog
+     - node_exporter
+
+
+ - name: Pinger
+   hosts: pinger
+   become: yes
+   gather_facts: no
+   roles:
+     - pinger
+   tags:
+     - pinger
+
+
+ - name: Backup
+   hosts: all
+   become: yes
+   gather_facts: no
+   roles:
+     - backup
+   tags:
+     - backup
+
+
+ - name: Install docker
+   hosts: docker
+   gather_facts: false
+   become: yes
+   roles:
+     - docker
+   tags:
+     - docker
+
+ - name: Setup Grafana Docker container
+   hosts: grafana
+   gather_facts: no
+   become: yes
+   roles:
+     - grafana
+     - grafana_docker
+   tags:
+     - grafana_docker
+
+
+ - name: Setup Agama Docker container
+   hosts: app_servers
+   gather_facts: no
+   become: yes
+   roles:
+     - agama_docker
+   tags:
+     - agama_docker
+
+
+ - name: Install HAProxy
+   hosts: haproxy
+   gather_facts: no
+   become: yes
+   roles:
+     - haproxy
+   tags:
+     - haproxy
+
+
+ - name: Install keepalived
+   hosts: haproxy
+   gather_facts: no
+   become: yes
+   roles:
+     - keepalived
+   tags:
+     - keepalived

@@ -1,6 +1,12 @@
 ---
-- name: Restart Telegraf
-  service:
-    name: telegraf
-    state: restarted
-    enabled: yes
+ - name: Restart telegraf
+   service:
+     name: telegraf
+     state: restarted
+     enabled: yes
+
+ - name: Restart influxdb
+   service:
+     name: influxdb
+     state: restarted
+     enabled: yes

@@ -1,21 +1,30 @@
 ---
-- name: Create Grafana directory
+- name: Create Grafana directories
   file:
-    name: "/opt/docker/grafana"
+    name: "{{ item }}"
     state: directory
     owner: "472"
     group: "472"
     recurse: true
+  loop:
+    - /opt/docker/grafana
+    - /opt/docker/grafana-etc
+
+- name: Configuration grafana.ini
+  template:
+    src: grafana.ini.j2
+    dest: /opt/docker/grafana-etc/grafana.ini
 
 - name: Setup Grafana container
   docker_container:
     name: grafana
     image: grafana/grafana
     env:
-      GF_SERVER_ROOT_URL: http://localhost:{{ grafana_port }}/grafana
+      GF_SERVER_ROOT_URL: http://localhost:3000/grafana
       GF_SERVER_SERVE_FROM_SUB_PATH: "true"
-    published_ports:
-      - "{{ grafana_port }}:3000"
+    ports:
+      - "{{ docker_grafana_port }}:3000"
     volumes:
       - /opt/docker/grafana:/var/lib/grafana/
-
+      - /opt/docker/grafana-etc:/etc/grafana/
+    restart_policy: always

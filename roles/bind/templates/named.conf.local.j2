@@ -1,0 +1,36 @@
+
+# Lab 14
+
+# Configuration for the DNS master_servers
+
+{% if inventory_hostname in groups['dns_masters'] %}
+
+zone "{{ domain }}." {
+     type master;
+     file "/var/lib/bind/db.{{ domain }}";
+     allow-transfer { key {{ dns_transfer }}; };
+     allow-update { key {{ dns_update }}; };
+};
+{% endif %}
+{% if inventory_hostname in groups['dns_slaves'] %}
+
+# Configuration for the DNS slave_servers
+
+{% for vm in groups['dns_masters'] %}
+server {{ hostvars[vm]['ansible_default_ipv4']['address'] }} {
+     keys { {{ dns_transfer }}; };
+};
+{% endfor %}
+
+
+zone "{{ domain }}." {
+     type slave;
+     file "/var/lib/bind/db.{{ domain }}";
+     masters {
+         {% for vm in groups['dns_masters'] %}
+             {{ hostvars[vm]['ansible_default_ipv4']['address'] }};
+         {% endfor %}
+     };
+};
+{% endif %}
+

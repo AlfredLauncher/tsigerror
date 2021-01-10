@@ -1,4 +1,10 @@
 ---
-- name: Reload daemon
-  systemd:
-    daemon_reload: yes
+ - name: Systemctl daemon-reload
+   shell: systemctl daemon-reload
+
+ - name: Restart nginx-prometheus-exporter
+   service: 
+     name: nginx-prometheus-exporter
+     state: restarted
+     enabled: yes
+

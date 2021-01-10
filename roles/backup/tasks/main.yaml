@@ -1,24 +1,67 @@
 ---
-- name: Create user backup and generate ssh key pairs
+- name: Add user "backup" and generate SSH key
   user:
     name: backup
-    state: present
-    shell: "/bin/bash"
+    shell: /bin/bash
+    home: /home/backup
     generate_ssh_key: yes
 
-- name: Add user to prometheus on vm1
-  user:
-    name: backup
-    groups: prometheus
-  when: inventory_hostname == "vm1"
+# Add MySQL backup user and MySQL cnf file
 
-- name: Add user to mysql, influxdb, grafana on vm2
-  user:
-    name: backup
-    groups: mysql,influxdb,grafana
+- name: Create MySQL backup user
+  mysql_user:
+    name: "{{ mysql_backup_user }}"
+    password: "{{ mysql_backup_pass }}"
+    priv: "{{ mysql_database }}.*:SELECT,LOCK TABLES"
+    host: "localhost"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  no_log: true
   when: inventory_hostname == "vm2"
 
-- name: Create directories
+- name: Copy MySQL configuration file
+  template:
+    src: backup.my.cnf.j2
+    dest: /home/backup/.my.cnf
+    owner: backup
+    group: backup
+    mode: '0400'
+  when: inventory_hostname == "vm2"
+
+# Configure backup user's groups
+- name: Add group Grafana
+  group:
+    name: grafana
+    state: present
+  when: inventory_hostname == groups['grafana'][0]
+
+
+
+- name: Add the user to the Grafana group on the vm3
+  user:
+    name: backup
+    groups: grafana
+  when: inventory_hostname == "vm3"
+
+
+#- name: Add the user to the Grafana group on the VM1
+#  user:
+#    name: backup
+#    groups: grafana
+#  when: inventory_hostname == "vm1"
+
+
+
+- name: Add the user to the MySQL group on the VM2
+  user:
+    name: backup
+    groups: mysql
+  when: inventory_hostname == "vm2"
+
+
+
+# Task to create required directories and backup scripts
+
+- name: Create backup, restore and scripts directories
   file:
     path: /home/backup/{{ item }}
     state: directory
@@ -28,70 +71,64 @@
   loop:
     - backup
     - restore
+    - scripts
 
-- name: Add conf for mysqldump
-  template:
-    src: .my.cnf.j2
-    dest: /home/backup/.my.cnf
-    owner: 'backup'
-    mode: '0400'
-  when: inventory_hostname == "vm2"
 
-- name: Create prometheus backup directory
-  file:
-    path: /home/backup/backup/prometheus
-    state: directory
+- name: Copy Grafana backup script to vm3
+  copy:
+    src: "{{ item }}"
+    dest: /home/backup/backup/{{ item }}
     owner: backup
     group: backup
-    mode: '0755'
-  when: inventory_hostname == "vm1"
+    mode: '0500'
+  when: inventory_hostname == "vm3"
+  loop:
+    - grafana.sh
 
-- name: Create influxdb backup directory
-  file:
-    path: /home/backup/backup/influxdb
-    state: directory
+
+- name: Copy MySQL backup scripts to VM2
+  copy:
+    src: "{{ item }}"
+    dest: /home/backup/backup/{{ item }}
     owner: backup
     group: backup
-    mode: '0755'
+    mode: '0500'
   when: inventory_hostname == "vm2"
+  loop:
+    - mysql.sh
 
-- name: Intall Duplicity
+
+
+# Install Duplicity and copy crontabs
+
+- name: Install Duplicity
   apt:
     name: duplicity
-    state: present
-    force_apt_get: yes
+    state: latest
 
-- name: Schedule backup scripts for vm1
-  copy:
-    src: backup_vm1
+- name: Copy crontab to VM1
+  template:
+    src: crontab.vm1.j2
     dest: /etc/cron.d/backup
+    owner: root
+    group: root
+    mode: '0644'
   when: inventory_hostname == "vm1"
 
-- name: Schedule backup scripts for vm2
-  copy:
-    src: backup_vm2
+- name: Copy crontab to VM2
+  template:
+    src: crontab.vm2.j2
     dest: /etc/cron.d/backup
+    owner: root
+    group: root
+    mode: '0644'
   when: inventory_hostname == "vm2"
 
-# SSH by backup
-# ssh shyamajp@backup.premiumfriday.ttu
-
-# dump by backup
-# mysqldump agama > /home/backup/backup/agama.sql
-
-# scp by backup
-# scp agama.sql shyamajp@backup.premiumfriday.ttu:agama.sql
-
-# copy to /home/backup/restore by backup
-# rsync -v shyamajp@backup.premiumfriday.ttu:agama.sql restore/agama.sql
-
-# restore by backup
-# mysql agama < restore/agama.sql -u agama -p
-
-
-
-
-# Duplicity
-# dumplicity -no-encryption full agama.sql rsync://shyamajp@backup.premiumfriday.ttu//home/shyamajp
-# dumplicity -no-encryption incremental agama.sql rsync://shyamajp@backup.premiumfriday.ttu//home/shyamajp
-# dumplicity -no-encryption restore rsync://shyamajp@backup.premiumfriday.ttu//home/shyamajp/  restore/
+- name: Copy crontab to VM3
+  template:
+    src: crontab.vm3.j2
+    dest: /etc/cron.d/backup
+    owner: root
+    group: root
+    mode: '0644'
+  when: inventory_hostname == "vm3"

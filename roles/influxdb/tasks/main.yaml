@@ -1,22 +1,42 @@
 ---
-- name: Install influxdb
-  apt:
-    name: 
-      - influxdb
-      - influxdb-client
-    force_apt_get: yes
+ - name: Install InfluxDB
+   apt:
+     name:
+      -  influxdb
+      -  influxdb-client
+     state: latest
 
-# > influx
-# > create database latency 
-# > use latency
 
-- name: Install Telegraf
-  apt:
-    deb: https://dl.influxdata.com/telegraf/releases/telegraf_1.16.0-1_amd64.deb
-    force_apt_get: yes
+ - name: Download Telegraf package
+   get_url:
+     url: https://dl.influxdata.com/telegraf/releases/telegraf_1.15.3-1_amd64.deb
+     dest: /opt/telegraf_1.15.3-1_amd64.deb
 
-- name: Install Telegraf
-  template:
-    src: telegraf.conf.j2
-    dest: /etc/telegraf/telegraf.conf
-  notify: Restart Telegraf
+ - name: Install Telegraf Package
+   apt:
+     deb: /opt/telegraf_1.15.3-1_amd64.deb
+
+ - name: Telegraf config
+   template:
+     src: telegraf.conf.j2
+     dest: /etc/telegraf/telegraf.conf
+   notify:
+     - Restart telegraf
+
+
+ - name: Force all notified handlers to run at this point, not waiting for normal sync points
+   meta: flush_handlers
+
+
+ - name: Start service influxdb, if not started
+   service:
+     name: influxdb
+     state: started
+     enabled: yes
+
+
+ - name: Start service Telegraf, if not started
+   service:
+     name: telegraf
+     state: started
+     enabled: yes

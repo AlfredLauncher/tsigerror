@@ -1,0 +1,19 @@
+$TTL	604800
+{{ domain }}.	           IN  SOA     vm3.{{ domain }}. nadezda.{{ domain }}. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+
+{% for vm in groups['dns_servers'] %}
+{{ domain }}.	IN	NS	{{ vm }}.{{ domain }}.
+{% endfor %}
+{% for vm in hostvars %}
+{{ hostvars[vm]['inventory_hostname'] }}.{{ domain }}.	IN	A	{{ hostvars[vm]['ansible_default_ipv4']['address'] }}
+{% endfor %}
+
+
+{% for i in dns_cnames %}
+{{ i.cname }} IN CNAME {{ i.real }}
+{% endfor %}

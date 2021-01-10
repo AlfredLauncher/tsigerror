@@ -1,51 +1,50 @@
 ---
-- name: Install application dependencies
-  apt:
-    name: fping
-    state: present
-    force_apt_get: yes
+ - name: Install fping
+   apt:
+     name: fping
+     state: latest
 
-- name: Create system user pinger
-  user:
-    name: pinger
-    state: present
-    system: yes
+ - name: Install curl
+   apt:
+     name: curl
+     state: latest
 
-- name: Create directory /etc/pinger
-  file:
-    path: /etc/pinger
-    state: directory
+ - name: Add the user "pinger"
+   user:
+     name: pinger
 
-- name: Copy pinger.conf
-  template:
-    src: pinger.conf.j2
-    dest: /etc/pinger/pinger.conf
-    mode: '0644'
-    
-- name: Restart InfluxDB
-  service:
-    name: influxdb
-    state: restarted
+ - name: Create pinger configuration directory
+   file:
+     path: /etc/pinger
+     state: directory
+     mode: '0751'
 
-- name: Copy pinger.sh
-  copy:
-    src: pinger.sh
-    dest: /usr/local/bin/pinger
-    mode: '0755'
+ - name: Configure Pinger config
+   template:
+     src: pinger.conf.j2
+     dest: /etc/pinger/pinger.conf
+     mode: '0755'
 
-- name: Restart InfluxDB
-  service:
-    name: influxdb
-    state: restarted
-    
-- name: Make service unit
-  copy:
-    src: pinger.service
-    dest: /etc/systemd/system
-    mode: '0644'
-  notify: Reload daemon
 
-- name: Start pinger
-  service:
-    name: pinger
-    state: started
+ - name: Setup pinger script
+   template:
+     src: pinger.sh.j2
+     dest: /usr/local/bin/pinger
+     mode: '0755'
+
+ - name: Create pinger service
+   template:
+     src: pinger.service.j2
+     dest: /etc/systemd/system/pinger.service
+   notify:
+     - Reload systemd
+     - Restart pinger
+
+ - name: Force all notified handlers to run at this point, not waiting for normal sync points
+   meta: flush_handlers
+
+ - name: Start service pinger, if not started
+   service:
+     name: pinger
+     state: started
+     enabled: yes

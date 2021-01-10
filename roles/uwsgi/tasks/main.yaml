@@ -1,43 +1,24 @@
 ---
-- name: Install uWSGI packages
-  apt:
-    name:
-      - uwsgi
-      - uwsgi-plugin-python3
-    state: present
+- name: Install uwsgi packages
+  apt: 
+    pkg:
+    - uwsgi
+    - uwsgi-plugin-python3
     force_apt_get: yes
 
-- name: Create directory for uWSGI configuration
-  file:
-    path: /etc/uwsgi/apps-enabled
-    state: directory
-
-# lab03
-# - name: Copy uWSGI configuration
-#   copy:
-#     src: agama.ini
-#     dest: /etc/uwsgi/apps-enabled/agama.ini
-#     force: yes
-#   notify: Restart uWSGI
-# lab03
-
-# lab04
-- name: Intall MySQL server
+- name: Install PyMySQL for uWSGI
   apt:
-    name: 
-      - python3-pymysql
-    force_apt_get: yes
+    name: python3-pymysql
+    state: latest
 
-- name: Copy uWSGI configuration
-  template:
-    src: agama.ini.j2
-    dest: /etc/uwsgi/apps-enabled/agama.ini
-    force: yes
-  notify: Restart uWSGI
-# lab04
 
-- name: Start uWSGI service
+- name: start uwsgi
   service:
     name: uwsgi
     state: started
-    enabled: yes
+
+- name: copy the uwsgi config file
+  template:
+    src: agama.ini
+    dest: /etc/uwsgi/apps-enabled/agama.ini
+  notify: restart uwsgi

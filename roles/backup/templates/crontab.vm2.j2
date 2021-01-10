@@ -1,0 +1,13 @@
+# According to backup SLA: backups should be done every day automatically at 1:00 (1 AM)
+
+0 1 * * * backup /home/backup/backup/mysql.sh
+
+
+# Upload all the backups every week at 1:00 (1 AM) everyday
+
+0 1 * * *  backup  duplicity --no-encryption full /home/backup/backup/ rsync://Nadezda123@backup.{{ domain }}//home/Nadezda123/
+
+
+# Delete old backups at 2:00 on every 1st day of the month
+
+0 2 1 * *  backup duplicity --no-encryption remove-older-than 30D rsync --force rsync://Nadezda123@backup.{{ domain }}//home/Nadezda123/

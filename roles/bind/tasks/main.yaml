@@ -1,25 +1,89 @@
 ---
-- name: Intall Bind9
-  apt:
-    name: 
-      - bind9
-    state: present
-    force_apt_get: yes
-    update_cache: yes
+ - name: Install Bind9 and dnspython
+   apt:
+     name:
+       - bind9
+       - python3-dnspython
+     state: latest
+     force_apt_get: no
 
-- name: Configure DNS forwarders, ACL, master zone
-  template:
-    src: named.conf.options.j2
-    dest: /etc/bind/named.conf.options
-  notify: Restart Bind9
-    
-- name: Make /etc/bind/db.{{ startup_name }}  directory
-  file:
-    path: /etc/bind/db.{{ startup_name }} 
-    state: directory
 
-- name: Configure master zone
-  template: 
-    src: db.adattiva.j2
-    dest: /etc/bind/db.{{ startup_name }}/db.{{ startup_name }}.zone
-  notify: Restart Bind9
+ - name: Bind configuration
+   template:
+     src: named.conf.options.j2
+     dest: /etc/bind/named.conf.options
+     validate: named-checkconf %s
+   notify: Restart bind9
+
+
+
+ - name: Bind zones configuration
+   template:
+     src: named.conf.local.j2
+     dest: /etc/bind/named.conf.local
+   notify: Restart bind9
+
+
+ - name: Configure master zone
+   template:
+     src: db.cloud.j2
+     dest: /var/lib/bind/db.{{ domain }}
+     force: no
+   notify: Rndc reload
+   when: inventory_hostname in groups['dns_masters']
+
+
+ - name: copy the resolv file
+   template:
+     src: resolv.conf.j2
+     dest: /etc/resolv.conf
+   notify: Restart bind9
+
+
+ - name: Execute handlers before adding records
+   meta: flush_handlers
+
+
+ - name: Start service bind9, if not started
+   service:
+     name: bind9
+     state: started
+     enabled: yes
+
+
+# - name: Add A record
+#   nsupdate:
+#     key_algorithm: "hmac-sha256"
+#     key_name: "{{ dns_update }}"
+#     key_secret: "{{ dns_update_key }}"
+#     server: "{{ hostvars[groups['dns_masters'][0]]['ansible_default_ipv4']['address'] }}"
+#     zone: "{{ domain }}"
+#     record: A
+#     value:
+#     type: "A"
+#   when: inventory_hostname == groups['dns_masters'][0]
+
+ - name: Add CNAME record
+   nsupdate:
+     key_algorithm: "hmac-sha256"
+     key_name: "{{ dns_update }}"
+     key_secret: "{{ dns_update_key }}"
+     server: "{{ hostvars[groups['dns_masters'][0]]['ansible_default_ipv4']['address'] }}"
+     zone: "{{ domain }}"
+     record: "{{ item['cname'] }}.{{ domain }}."
+     value: "{{ item['real'] }}.{{ domain }}."
+     type: "CNAME"
+   loop: "{{ dns_cnames }}"
+   when: inventory_hostname == groups['dns_masters'][0]
+
+ - name: Force all notified handlers to run at this point, not waiting for normal sync points
+   meta: flush_handlers
+
+
+
+
+ - name: Start service bind9, if not started
+   service:
+     name: bind9
+     state: started
+     enabled: yes
